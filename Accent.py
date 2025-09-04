@@ -1,37 +1,36 @@
 '''
-Escrever uma frase em ingles no afirmativo
-e ele identificar se tem o verdo to be, se sim
-vai me retornar a frase em pergunta com o verbo trocado
-se não ele vai adicionar um verbo auxiliar e transformar em pergunta
+Write a sentence in English in the affirmative form,
+and it will check if it contains the verb to be.
+If it does, it will return the sentence as a question with the verb swapped.
+If not, it will add an auxiliary verb and turn it into a question.
 '''
 
-class Accent():
+class Accent:
+           
+    def threeSteps(self, question):
 
-    def __init__(self, question):
-        self.question = question
-    
-    def threeSteps(self):
-
-        verb_Tobe = ["i am", "you are", "he is", "she is", "it is", "we are", "they are"]
+        verb_Tobe = ["i am", "you are", "he is", "she is",  "it is", "we are", "they are"] 
         verb_TobeInverted = ["am i", "are you", "is he", "is she", "is it", "are we", "are they"]
 
-        if question in verb_Tobe:
-            print(True)
-            #Preciso Retornar a posição certinha que corresponde
-            #list.index(element, start, end)
-            print(verb_Tobe.index(question))
-            print(len(question))
-            print("Tem verbo ToBe")
+        # Ordena por tamanho decrescente para evitar conflito he is / she is
+        verbs_sorted = sorted(zip(verb_Tobe, verb_TobeInverted), key=lambda x: len(x[0]), reverse=True)
 
-        else:
-            print(False)
-            print(len(question))
-            print("Não tem verbo ToBe")
+        for original, inverted in verbs_sorted:
+            if original.lower() in question.lower():
+                start_index = question.lower().find(original.lower())
+                end_index = start_index + len(original)
+                result = question[:start_index] + inverted + question[end_index:]
+                print(f"{result}?")
+                return  
 
-question = input("Digite a Frase: ")
+        # Se nenhum verbo TO BE foi encontrado
+        print("Não foi identificado o Verbo ToBe")
+        
+        # Add DO and DOES when the verb TO BE is not present.
 
-answer = Accent(question)
-answer.threeSteps()
+question = input("Digite a Frase no Afirmativo: ")
+answer = Accent()
+answer.threeSteps(question)
 
 
 
